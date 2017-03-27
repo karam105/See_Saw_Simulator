@@ -15,8 +15,8 @@ int semaphore2 = 1;
 
 void *fredSee(void *param);
 void *wilmaSaw(void *param);
-void decrement();
-unique_lock<mutex> lck(mtx);
+void wait(S);
+void signal(S);
 
 
 int main()
