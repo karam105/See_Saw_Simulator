@@ -10,7 +10,8 @@ condition_variable cv;
 
 double fredHeight = 1;
 double wilmaHeight = 7;
-int value;
+int semaphore1 = 0;
+int semaphore2 = 1;
 
 void *fredSee(void *param);
 void *wilmaSaw(void *param);
@@ -60,17 +61,13 @@ void *wilmaSaw(void *param)
   pthread_exit(NULL);
 }
 
-void decrement()
+void wait(S)
 {
-  while (value == 0)
-  {
-    try
-    {
-      cv.wait(lck, [] {return value == 0;});
-    }
-    catch (exception e)
-    {
-      cout << "ERROR" << endl;
-    }
-  }
+  while (s <= 0)
+    ;
+  s--;
+}
+void signal(S)
+{
+  s++;
 }
