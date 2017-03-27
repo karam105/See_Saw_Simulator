@@ -2,22 +2,18 @@
 #include <pthread.h>
 #include <mutex>
 #include <condition_variable>
+#include <semaphore.h>
 
 using namespace std;
 
-mutex mtx;
-condition_variable cv;
-
 double fredHeight = 1;
 double wilmaHeight = 7;
-int semaphore1 = 0;
-int semaphore2 = 1;
+
+sem_t semaphore1;
+sem_init(&semaphore1, 0, 0); //error
 
 void *fredSee(void *param);
 void *wilmaSaw(void *param);
-void wait(S);
-void signal(S);
-
 
 int main()
 {
@@ -59,15 +55,4 @@ void *wilmaSaw(void *param)
   cout << "Going up..." << endl;
   cout << endl;
   pthread_exit(NULL);
-}
-
-void wait(S)
-{
-  while (s <= 0)
-    ;
-  s--;
-}
-void signal(S)
-{
-  s++;
 }
