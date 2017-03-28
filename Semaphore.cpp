@@ -2,18 +2,22 @@
 #include <pthread.h>
 #include <mutex>
 #include <condition_variable>
-#include <semaphore.h>
+#include <unistd.h>
 
 using namespace std;
 
 double fredHeight = 1;
 double wilmaHeight = 7;
-
-sem_t semaphore1;
-sem_init(&semaphore1, 0, 0); //error
+int fredSem = 1;
+int wilmaSem = 1;
+int value = 1;
 
 void *fredSee(void *param);
 void *wilmaSaw(void *param);
+void fredWait();
+void wilmaWait();
+void fredSignal();
+void wilmaSignal();
 
 int main()
 {
@@ -31,28 +35,63 @@ int main()
 
 void *fredSee(void *param)
 {
-  while (fredHeight < 7)
+  while (value <= 10)
   {
-    fredHeight++;
-    wilmaHeight--;
-    cout << "Fred's Height: " << fredHeight << endl;
-    cout << "Wilma's Height: " << wilmaHeight << endl;
+    fredWait();
+    while (fredHeight < 7)
+    {
+      cout << "Fred's Height: " << fredHeight << endl;
+      cout << "Wilma's Height: " << wilmaHeight << endl;
+      fredHeight++;
+      wilmaHeight--;
+      sleep(1);
+    }
+    cout << "Going down..." << endl;
+    cout << endl;
+    wilmaSignal();
   }
-  cout << "Going down..." << endl;
-  cout << endl;
   pthread_exit(NULL);
 }
 
 void *wilmaSaw(void *param)
 {
-  while (fredHeight > 1)
+  while (value <= 10)
   {
-    wilmaHeight = wilmaHeight + 1.5;
-    fredHeight = fredHeight - 1.5;
-    cout << "Fred's Height: " << fredHeight << endl;
-    cout << "Wilma's Height: " << wilmaHeight << endl;
+    wilmaWait();
+    while (fredHeight > 1)
+    {
+      cout << "Fred's Height: " << fredHeight << endl;
+      cout << "Wilma's Height: " << wilmaHeight << endl;
+      wilmaHeight = wilmaHeight + 1.5;
+      fredHeight = fredHeight - 1.5;
+      sleep(1);
+    }
+    cout << "Going up..." << endl;
+    cout << endl;
+    fredSignal();
+    value++;
   }
-  cout << "Going up..." << endl;
-  cout << endl;
   pthread_exit(NULL);
+}
+
+void fredWait()
+{
+  while(fredSem <= 0);
+  fredSem--;
+}
+
+void wilmaWait()
+{
+  while(wilmaSem <= 0);
+  wilmaSem--;
+}
+
+void fredSignal()
+{
+  fredSem++;
+}
+
+void wilmaSignal()
+{
+  wilmaSem++;
 }
