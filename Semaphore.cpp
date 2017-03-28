@@ -42,6 +42,7 @@ void *fredSee(void *param)
     {
       cout << "Fred's Height: " << fredHeight << endl;
       cout << "Wilma's Height: " << wilmaHeight << endl;
+      cout << endl;
       fredHeight++;
       wilmaHeight--;
       sleep(1);
@@ -62,6 +63,7 @@ void *wilmaSaw(void *param)
     {
       cout << "Fred's Height: " << fredHeight << endl;
       cout << "Wilma's Height: " << wilmaHeight << endl;
+      cout << endl;
       wilmaHeight = wilmaHeight + 1.5;
       fredHeight = fredHeight - 1.5;
       sleep(1);
